@@ -34,7 +34,7 @@ export default function Dashboard() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {guides.slice(0, 6).map((guide) => (
+          {guides.slice(0, 3).map((guide) => (
             <Link
               key={guide.slug}
               href={`/guias/${guide.slug}`}

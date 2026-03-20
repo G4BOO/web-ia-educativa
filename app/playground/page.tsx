@@ -1,4 +1,3 @@
-import { Header } from '@/components/Header';
 import { PromptEditor } from '@/components/PromptEditor';
 
 export const metadata = {

@@ -101,7 +101,10 @@ export function PromptEditor() {
                 placeholder={"Escribe tu instrucción educativa aquí...\n\nEjemplo: 'Crea un plan de clase sobre fotosíntesis para 5to grado'"}
               ></textarea>
               
-              <div className="absolute bottom-3 right-3 flex items-center gap-2">
+              
+            </div>
+
+            <div className="flex justify-end items-center gap-2">
                 {isLoading && (
                   <button 
                     type="button"
@@ -115,19 +118,33 @@ export function PromptEditor() {
                 <button 
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="bg-linear-to-r from-primary to-primary/80 hover:from-primary/95 hover:to-primary/85 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-900 font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.97] cursor-pointer text-sm"
+                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-primary bg-slate-50 dark:bg-zinc-800 hover:bg-primary/5 rounded-lg border border-slate-100 dark:border-zinc-700 hover:border-primary/30 transition-all cursor-pointer flex items-center gap-1.5 disabled:cursor-not-allowed"
                 >
                   <span className={`material-symbols-outlined text-[18px] ${isLoading ? 'animate-spin' : ''}`}>
                     {isLoading ? 'progress_activity' : 'auto_awesome'}
                   </span>
                   <span>{isLoading ? 'Analizando...' : 'Valorar Prompt'}</span>
                 </button>
+
+
+                {!isLoading && hasResponse && (
+ 
+                  
+                  <button type="button"
+                    onClick={handleClear}
+                    className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-primary bg-slate-50 dark:bg-zinc-800 hover:bg-primary/5 rounded-lg border border-slate-100 dark:border-zinc-700 hover:border-primary/30 transition-all cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">restart_alt</span>
+                    Nuevo análisis
+                  </button>
+              )}
               </div>
-            </div>
+
+              
           </form>
 
           {/* Quick suggestions - AI Elements Suggestion component */}
-          {!isStarted && (
+          {/* {!isStarted && (
             <div className="space-y-2">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Prueba con:</span>
               <Suggestions>
@@ -143,7 +160,7 @@ export function PromptEditor() {
                 ))}
               </Suggestions>
             </div>
-          )}
+          )} */}
 
           {/* Evaluation Results - Using AI Elements */}
           {(hasResponse || isLoading) && (
@@ -156,8 +173,8 @@ export function PromptEditor() {
                     <ScoreGauge score={score} />
                   ) : isLoading ? (
                     <div className="flex flex-col items-center justify-center gap-2 p-6 rounded-2xl bg-slate-100/50 dark:bg-zinc-800/50 min-w-[160px]">
-                      <div className="relative w-32 h-32 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-5xl text-primary/40 animate-pulse">psychology</span>
+                      <div className="relative w-15 h-15 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-7xl text-primary/40 animate-pulse">psychology</span>
                       </div>
                       <Shimmer duration={1.5}>Calculando puntuación...</Shimmer>
                     </div>
@@ -173,14 +190,11 @@ export function PromptEditor() {
                         {isLoading && !hasResponse ? 'Evaluando tu prompt...' : 'Evaluación del Prompt'}
                       </h4>
                     </div>
-                    <p className="text-xs text-slate-400 dark:text-zinc-500 font-medium flex items-center gap-1.5">
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                      Gemini 2.5 Flash · Google AI · Streaming
-                    </p>
+                    
                     {score !== null && (
                       <div className="mt-3 flex flex-wrap gap-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-primary/10 text-primary">Pedagógico</span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500">IA Ética</span>
+                        
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-500">Prompt Engineering</span>
                       </div>
                     )}
@@ -200,7 +214,7 @@ export function PromptEditor() {
                     }}
                   />
                   {reasoningText && (
-                    <ReasoningContent className="text-slate-500 dark:text-zinc-400 border-l-2 border-primary/20 pl-4">
+                    <ReasoningContent className="text-slate-900 dark:text-zinc-800 border-l-2 border-primary/20 pl-4">
                       {reasoningText}
                     </ReasoningContent>
                   )}
@@ -236,20 +250,7 @@ export function PromptEditor() {
               )}
 
               {/* Action buttons */}
-              {!isLoading && hasResponse && (
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-[11px] text-slate-300 dark:text-zinc-600 font-medium">
-                    Evaluación generada por IA — verifica siempre los resultados
-                  </p>
-                  <button type="button"
-                    onClick={handleClear}
-                    className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-primary bg-slate-50 dark:bg-zinc-800 hover:bg-primary/5 rounded-lg border border-slate-100 dark:border-zinc-700 hover:border-primary/30 transition-all cursor-pointer flex items-center gap-1.5"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">restart_alt</span>
-                    Nuevo análisis
-                  </button>
-                </div>
-              )}
+              
             </div>
           )}
         </div>

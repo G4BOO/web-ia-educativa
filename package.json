@@ -11,7 +11,8 @@
   "dependencies": {
     "@ai-sdk/google": "^3.0.43",
     "@ai-sdk/react": "^3.0.118",
-
+    "@openrouter/ai-sdk-provider": "^2.3.3",
+    "@openrouter/sdk": "^0.9.11",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@rive-app/react-webgl2": "^4.27.2",
     "@streamdown/cjk": "^1.0.3",
@@ -35,7 +36,6 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-jsx-parser": "^2.4.1",
-
     "shadcn": "^4.0.8",
     "shiki": "^4.0.2",
     "streamdown": "^2.5.0",

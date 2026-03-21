@@ -1,35 +1,45 @@
-import { streamText } from 'ai';
+import { streamText, AISDKError } from 'ai';
 import { google } from '@ai-sdk/google';
+import { createOpenRouter} from '@openrouter/ai-sdk-provider'
+
 
 const SYSTEM_PROMPT = `Eres un experto pedagogo e ingeniero de IA especializado en evaluar prompts educativos.
 Tienes que contestar de manera precisa y concisa, no te excedas demasiado para no aburrir al usuario.
 REGLAS DE FORMATO OBLIGATORIAS:
+- Tu respuesta debe estar en español.
+- Razonar en español
 - Tu PRIMERA línea de respuesta SIEMPRE debe ser exactamente: **PUNTUACIÓN: [número]/100**
 - Luego una línea en blanco.
 
 Después continúa con el análisis completo:
 
-## 🔍 Reflexiones Pedagógicas
+## Reflexiones Pedagógicas
 Analiza qué funciona bien, qué falta, cuál es la intención del docente, y el nivel de claridad.
 
-## 📊 Feedback Constructivo
+## Feedback Constructivo
 Brinda retroalimentación detallada sobre cómo mejorar el prompt. Sé específico con ejemplos.
 
-## ✨ Prompt Mejorado
+## Prompt Mejorado
 Proporciona una versión mejorada del prompt dentro de un bloque de cita (>) para que el docente pueda copiarlo directamente.
 
 Mantén un tono entusiasta, profesional e inspirador. Usa emojis moderadamente para hacer el texto más visual.`;
 
+const openRouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+})
+
 export async function POST(req: Request) {
+
+
   try {
     const body = await req.json();
     const { messages: uiMessages } = body;
 
-    const model = google('gemini-2.5-flash');
 
-    // Convertir UIMessage[] (formato useChat v6) a ModelMessage[]
-    // UIMessage: { id, role, parts: [{ type: 'text', text: '...' }] }
-    // ModelMessage: { role, content: string }
+
+    const secondModel = openRouter.chat('nvidia/nemotron-3-super-120b-a12b:free')
+
+    
     const modelMessages = (uiMessages || []).map((msg: { role: string; parts?: { type: string; text?: string }[]; content?: string }) => {
       let content = '';
       if (msg.parts && Array.isArray(msg.parts)) {
@@ -47,13 +57,35 @@ export async function POST(req: Request) {
       };
     });
 
-    const result = streamText({
-      model,
-      system: SYSTEM_PROMPT,
-      messages: modelMessages,
-    });
+    //FallBack
+    let result;
 
-    return result.toUIMessageStreamResponse();
+
+    try {
+      result = streamText({
+        model: secondModel,
+        system: SYSTEM_PROMPT,
+        messages: modelMessages,
+        maxRetries: 0,
+        
+      });
+
+      
+      
+      console.log(result.response)
+      console.log(result.toUIMessageStreamResponse())
+    
+      return result.toUIMessageStreamResponse();
+
+    } catch (err: any) {
+
+      
+        
+    }
+
+    
+
+
   } catch (error) {
     console.error('Error en Evaluate API:', error);
     return Response.json(

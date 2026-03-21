@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       };
     });
 
-      result = streamText({
+      const result = streamText({
         model: secondModel,
         system: SYSTEM_PROMPT,
         messages: modelMessages,    

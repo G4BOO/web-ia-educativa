@@ -35,11 +35,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { messages: uiMessages } = body;
 
-
-
     const secondModel = openRouter.chat('nvidia/nemotron-3-super-120b-a12b:free')
 
-    
     const modelMessages = (uiMessages || []).map((msg: { role: string; parts?: { type: string; text?: string }[]; content?: string }) => {
       let content = '';
       if (msg.parts && Array.isArray(msg.parts)) {
@@ -57,34 +54,16 @@ export async function POST(req: Request) {
       };
     });
 
-    //FallBack
-    let result;
-
-
-    try {
       result = streamText({
         model: secondModel,
         system: SYSTEM_PROMPT,
-        messages: modelMessages,
-        maxRetries: 0,
-        
+        messages: modelMessages,    
       });
 
-      
-      
       console.log(result.response)
       console.log(result.toUIMessageStreamResponse())
-    
+
       return result.toUIMessageStreamResponse();
-
-    } catch (err: any) {
-
-      
-        
-    }
-
-    
-
 
   } catch (error) {
     console.error('Error en Evaluate API:', error);

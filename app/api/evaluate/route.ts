@@ -1,96 +1,151 @@
-import { streamText, AISDKError } from 'ai';
-import { google } from '@ai-sdk/google';
-import { createOpenRouter} from '@openrouter/ai-sdk-provider'
+import { streamText } from 'ai';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+
+// ────────────────────────────────────────────────────
+// System prompts por modo
+// ────────────────────────────────────────────────────
 
 
-const SYSTEM_PROMPT = `Eres un experto pedagogo e ingeniero de IA especializado en evaluar prompts educativos.
-Tienes que contestar de manera precisa y concisa, no te excedas demasiado para no aburrir al usuario.
-REGLAS DE FORMATO OBLIGATORIAS:
-- Tu respuesta debe estar en español.
-- Razonar en español
+
+
+const SHARED_FORMAT_RULES = `
+## Formato de respuesta obligatorio
+Debes seguir esta estructura exacta en cada respuesta:
+
 - Tu PRIMERA línea de respuesta SIEMPRE debe ser exactamente: **PUNTUACIÓN: [número]/100**
-- Luego una línea en blanco.
 
-Después continúa con el análisis completo:
+**Estado: [Aprobado ✨ / Mejorable 📝]**
 
-## Reflexiones Pedagógicas
-Analiza qué funciona bien, qué falta, cuál es la intención del docente, y el nivel de claridad.
+### 💡 Reflexiones Pedagógicas
+[Análisis cualitativo breve, máx 5 líneas]
 
-## Feedback Constructivo
-Brinda retroalimentación detallada sobre cómo mejorar el prompt. Sé específico con ejemplos.
+### 🔧 Feedback Constructivo
+[3 a 5 mejoras concretas, con viñetas]
 
-## Prompt Mejorado
-Proporciona una versión mejorada del prompt dentro de un bloque de cita (>) para que el docente pueda copiarlo directamente.
+### ✨ Prompt Mejorado
+> [versión mejorada del prompt del docente]
+Dentro de un bloque de citas
 
-Mantén un tono entusiasta, profesional e inspirador. Usa emojis moderadamente para hacer el texto más visual.`;
+### ✅ Mejoras aplicadas
+- [cambio 1]
+- [cambio 2]
+
+Mantén tono entusiasta, usa máximo 3 emojis por sección. No excedas 30 líneas totales.
+`;
+
+const SYSTEM_PROMPTS: Record<string, string> = {
+  text: `Eres un experto pedagogo e ingeniero de IA especializado en evaluar prompts educativos para TEXTO.
+
+## Criterios de evaluación (total 100 pts)
+- **Rol pedagógico** (25 pts): ¿La IA sabe si debe actuar como tutor, explicador, generador de ejemplos, etc.?
+- **Chain-of-Thought** (20 pts): ¿El prompt pide razonamiento paso a paso (1°, 2°, 3° o "primero... luego...")?
+- **Nivel educativo** (15 pts): ¿Se especifica grado, edad o curso exacto? ("para niños" = solo 5 pts)
+- **Extensión controlada** (15 pts): ¿Se indica #párrafos, #palabras o #viñetas?
+- **Tono pedagógico** (15 pts): ¿Se define el tono (motivador, estricto, amable, académico)?
+- **Ejemplo de salida** (10 pts extra): ¿Se incluye un ejemplo de respuesta deseada?
+
+${SHARED_FORMAT_RULES}
+
+Aprueba con ≥70 pts. Si el puntaje es <70, el Prompt Mejorado DEBE añadir explícitamente los criterios faltantes.`,
+
+  image: `Eres un experto en IA generativa especializado en evaluar prompts para IMÁGENES educativas.
+
+## Criterios de evaluación (total 100 pts)
+- **Rol visual** (25 pts): ¿Indica que la IA actúa como ilustrador educativo, diseñador de infografías, dibujante científico?
+- **Estilo artístico** (20 pts): ¿Se define estilo concreto (dibujo a mano, vector plano, acuarela, esquema etiquetado)?
+- **Elementos obligatorios** (20 pts): ¿Enumera objetos, etiquetas, flechas o colores específicos?
+- **Formato técnico** (15 pts): ¿Incluye resolución (px), relación de aspecto o tipo de archivo (PNG/JPG)?
+- **Nivel de detalle** (10 pts): ¿Especifica si es simple o complejo, cuántos objetos incluir?
+- **Legibilidad** (10 pts): ¿Restringe textos largos (<5 palabras por etiqueta) o desorden visual?
+
+${SHARED_FORMAT_RULES}
+
+Aprueba con ≥70 pts. Para imagen, prioriza que el prompt mejorado incluya SIEMPRE formato técnico y estilo.`,
+
+  presentation: `Eres un experto diseñador instruccional especializado en evaluar prompts para PRESENTACIONES educativas.
+
+## Criterios de evaluación (total 100 pts)
+- **Rol narrativo** (25 pts): ¿La IA actúa como diseñador instruccional, storyteller de aula, creador de slides?
+- **Número exacto de diapositivas** (20 pts): ¿Indica un número concreto (no "varias", "algunas")?
+- **Estructura por slide** (20 pts): ¿Especifica qué va en título, contenido e imagen de cada slide?
+- **Tiempo o ritmo** (15 pts): ¿Sugiere duración (ej: "1 min por slide", "total 10 minutos")?
+- **Flujo lógico** (10 pts): ¿Pide una narrativa clara (causa-efecto, problema-solución, secuencia temporal)?
+- **Elementos visuales** (10 pts): ¿Sugiere tipo de gráfico, íconos o colores por slide?
+
+${SHARED_FORMAT_RULES}
+
+Aprueba con ≥70 pts. Si falta el número de slides, el prompt mejorado debe fijar 5 diapositivas por defecto.`,
+};
+
+// ────────────────────────────────────────────────────
+// Tipos para mensajes de la UI
+// ────────────────────────────────────────────────────
+
+interface UIMessagePart {
+  type: string;
+  text?: string;
+}
+
+interface UIMessage {
+  role: string;
+  parts?: UIMessagePart[];
+  content?: string;
+}
+
+// ────────────────────────────────────────────────────
+// Helpers
+// ────────────────────────────────────────────────────
+
+function extractMessageContent(msg: UIMessage): string {
+  if (msg.parts && Array.isArray(msg.parts)) {
+    return msg.parts
+      .filter((p) => p.type === 'text')
+      .map((p) => p.text || '')
+      .join('');
+  }
+  return typeof msg.content === 'string' ? msg.content : '';
+}
+
+function normalizeMessages(uiMessages: UIMessage[]) {
+  return (uiMessages || []).map((msg) => ({
+    role: msg.role as 'user' | 'assistant',
+    content: extractMessageContent(msg),
+  }));
+}
+
+// ────────────────────────────────────────────────────
+// OpenRouter client
+// ────────────────────────────────────────────────────
 
 const openRouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
-})
+});
+
+// ────────────────────────────────────────────────────
+// Route handler
+// ────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
-
-
   try {
-    const body = await req.json();
-    const { messages: uiMessages } = body;
+    const { messages: uiMessages, mode = 'text' } = await req.json();
+    console.log('[Evaluate API] Modo recibido:', mode);
+    const systemPrompt = SYSTEM_PROMPTS[mode] ?? SYSTEM_PROMPTS.text;
+    const modelMessages = normalizeMessages(uiMessages);
+    const model = openRouter.chat('inclusionai/ling-2.6-flash:free');
 
-
-
-    const secondModel = openRouter.chat('nvidia/nemotron-3-super-120b-a12b:free')
-
-    
-    const modelMessages = (uiMessages || []).map((msg: { role: string; parts?: { type: string; text?: string }[]; content?: string }) => {
-      let content = '';
-      if (msg.parts && Array.isArray(msg.parts)) {
-        content = msg.parts
-          .filter((p: { type: string }) => p.type === 'text')
-          .map((p: { text?: string }) => p.text || '')
-          .join('');
-      } else if (typeof msg.content === 'string') {
-        content = msg.content;
-      }
-
-      return {
-        role: msg.role as 'user' | 'assistant',
-        content,
-      };
+    const result = streamText({
+      model,
+      system: systemPrompt,
+      messages: modelMessages,
+      maxRetries: 0,
     });
 
-    //FallBack
-    let result;
-
-
-    try {
-      result = streamText({
-        model: secondModel,
-        system: SYSTEM_PROMPT,
-        messages: modelMessages,
-        maxRetries: 0,
-        
-      });
-
-      
-      
-      console.log(result.response)
-      console.log(result.toUIMessageStreamResponse())
-    
-      return result.toUIMessageStreamResponse();
-
-    } catch (err: any) {
-
-      
-        
-    }
-
-    
-
-
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error('Error en Evaluate API:', error);
     return Response.json(
       { error: 'Error interno del servidor.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

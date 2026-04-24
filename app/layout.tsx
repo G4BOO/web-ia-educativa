@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: 'AI Educa Otto - Dashboard Docente',
+  title: 'EducAI - IA en la Educación',
   description: 'Plataforma web educativa para docentes usando IA.',
 };
 

@@ -1,5 +1,5 @@
 // ════════════════════════════════════════════════════════════════
-// Datos centralizados de Guías y Blog de la plataforma
+// Datos centralizados de Guías de la plataforma IA Educativa
 // ════════════════════════════════════════════════════════════════
 
 export interface Guide {
@@ -13,448 +13,287 @@ export interface Guide {
   content: string; // Markdown
 }
 
-export interface BlogPost {
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  date: string;
-  readTime: string;
-  author: string;
-  coverIcon: string;
-  colorClass: string;
-  content: string; // Markdown
-}
-
 // ────────────────────────────────────────────────────
-// GUÍAS EDUCATIVAS
+// GUÍAS — CATEGORÍAS DE IA PARA DOCENTES
 // ────────────────────────────────────────────────────
 
 export const guides: Guide[] = [
   {
-    slug: 'metodo-role',
-    icon: 'person_search',
-    title: 'Método ROLE para Prompts',
-    description: 'Aprende a estructurar tus prompts con el framework ROLE: Rol, Objetivo, Limitaciones y Estilo para obtener respuestas precisas.',
-    colorClass: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
-    category: 'Prompt Engineering',
-    readTime: '8 min',
-    content: `
-## ¿Qué es el Método ROLE?
-
-El método **ROLE** es un framework diseñado para que los docentes puedan construir prompts de alta calidad al interactuar con Inteligencia Artificial. Cada letra representa un componente clave:
-
-### R — Rol
-Define **quién** quieres que sea la IA. Darle un rol específico mejora la calidad de las respuestas hasta un 40%.
-
-> **Ejemplo:** "Actúa como un pedagogo especialista en educación primaria con 15 años de experiencia."
-
-### O — Objetivo
-Describe **qué** necesitas que haga. Sé específico y claro sobre el resultado esperado.
-
-> **Ejemplo:** "Necesito que diseñes un plan de clase de 45 minutos sobre fotosíntesis para estudiantes de 5to grado."
-
-### L — Limitaciones
-Establece las **restricciones** y el contexto. Esto incluye nivel educativo, tiempo, recursos disponibles, etc.
-
-> **Ejemplo:** "Los estudiantes tienen acceso limitado a tecnología. Usa solo materiales físicos como plantas, papel y colores."
-
-### E — Estilo de Respuesta
-Indica el **formato** y tono de la respuesta.
-
-> **Ejemplo:** "Responde con un plan estructurado en tabla con columnas: Tiempo, Actividad, Recursos y Evaluación."
-
----
-
-## Ejemplo Completo
-
-> **Prompt ROLE:** "Actúa como un pedagogo experto en ciencias naturales (R). Diseña un plan de clase de 45 minutos sobre el ciclo del agua para 4to grado (O). Los estudiantes tienen nivel básico de lectura y no hay acceso a proyector (L). Presenta el plan en formato tabla con actividades prácticas y una rúbrica de evaluación simple (E)."
-
-## Errores Comunes
-
-1. **Ser demasiado vago:** "Hazme un plan de clase" → No tiene contexto
-2. **No dar restricciones:** Sin limitaciones, la IA puede sugerir recursos inaccesibles
-3. **Olvidar el formato:** Sin indicar estilo, la respuesta puede ser un bloque de texto inútil
-
-## Consideraciones Éticas
-
-- ⚖️ **Nunca uses IA para reemplazar tu criterio pedagógico** — úsala como herramienta de apoyo
-- 🔒 **No incluyas información personal de estudiantes** en los prompts
-- ✅ **Siempre revisa y adapta** las respuestas de la IA antes de usarlas en clase
-`,
-  },
-  {
-    slug: 'creacion-rubricas',
-    icon: 'fact_check',
-    title: 'Creación de Rúbricas con IA',
-    description: 'Genera rúbricas de evaluación detalladas y alineadas con los estándares educativos usando prompts efectivos.',
-    colorClass: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-    category: 'Evaluación',
-    readTime: '10 min',
-    content: `
-## ¿Por qué usar IA para crear rúbricas?
-
-Crear rúbricas alineadas a estándares consume un promedio de **2-3 horas** por asignación. Con IA, puedes reducir ese tiempo a **15 minutos** sin sacrificar calidad.
-
-### Componentes de una buena rúbrica
-
-1. **Criterios claros** — ¿Qué aspectos evalúas?
-2. **Niveles de desempeño** — Generalmente 4: Excelente, Bueno, Aceptable, Necesita Mejora
-3. **Descriptores específicos** — ¿Qué significa exactamente "excelente" en cada criterio?
-4. **Ponderación** — ¿Cuánto vale cada criterio?
-
-### Prompt Modelo
-
-> "Eres un experto en evaluación educativa. Crea una rúbrica analítica con 4 niveles de desempeño (Excelente, Bueno, Aceptable, En Desarrollo) para evaluar un ensayo argumentativo sobre cambio climático de estudiantes de 9no grado. Incluye los criterios: Tesis, Argumentación, Evidencia, Organización y Gramática. Formato: tabla con descriptores específicos para cada nivel."
-
-### Consejos Éticos
-
-- 🎯 **Personaliza siempre** la rúbrica al contexto de tus estudiantes
-- 🔄 **La IA es un borrador** — no el producto final
-- 📊 **Comparte la rúbrica** con estudiantes ANTES de la evaluación
-- ⚖️ **Verifica el sesgo** — revisa que los criterios no discriminen
-`,
-  },
-  {
-    slug: 'feedback-formativo',
-    icon: 'forum',
-    title: 'Feedback Formativo con IA',
-    description: 'Usa la IA para generar retroalimentación constructiva, personalizada y oportuna para tus estudiantes.',
-    colorClass: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
-    category: 'Retroalimentación',
-    readTime: '7 min',
-    content: `
-## El Arte del Feedback Formativo
-
-El feedback formativo **no califica** — **guía**. La IA puede ayudarte a generar retroalimentación que motive al estudiante a mejorar.
-
-### Principios del Buen Feedback
-
-1. **Específico:** No "buen trabajo", sino "tu argumento sobre X es sólido porque..."
-2. **Oportuno:** Lo más cercano posible al momento de la actividad
-3. **Accionable:** Indica exactamente qué puede hacer el estudiante para mejorar
-4. **Empático:** Reconoce el esfuerzo antes de señalar áreas de mejora
-
-### Prompt para Feedback
-
-> "Actúa como un tutor amable y experto. Un estudiante de 7mo grado escribió el siguiente párrafo sobre la independencia. Proporciona feedback formativo siguiendo el modelo: 1) Destaca algo positivo, 2) Identifica un área de mejora con ejemplo, 3) Sugiere un siguiente paso concreto. Tono: motivador y respetuoso."
-
-### ⚠️ Precauciones Éticas
-
-- **Nunca entregues feedback generado por IA sin revisarlo**
-- **No copies y pegues directamente** — adapta el lenguaje a tu relación con el estudiante
-- **Mantén la confidencialidad** — no incluyas nombres reales de estudiantes en los prompts
-`,
-  },
-  {
-    slug: 'adaptacion-curricular',
-    icon: 'diversity_3',
-    title: 'Adaptación Curricular',
-    description: 'Adapta materiales educativos para necesidades especiales, diferentes niveles y estilos de aprendizaje.',
-    colorClass: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
-    category: 'Inclusión',
-    readTime: '9 min',
-    content: `
-## Inclusión Educativa con IA
-
-La adaptación curricular es uno de los desafíos más grandes para los docentes. La IA puede ayudarte a crear **versiones diferenciadas** de un mismo material.
-
-### Tipos de Adaptación
-
-| Tipo | Descripción | Ejemplo con IA |
-|------|-------------|----------------|
-| **Contenido** | Simplificar o enriquecer el material | "Adapta este texto a nivel de lectura de 3er grado" |
-| **Proceso** | Cambiar la forma de aprender | "Crea 3 actividades: visual, auditiva y kinestésica" |
-| **Producto** | Diferentes maneras de demostrar aprendizaje | "Ofrece 5 opciones de proyecto final alternativas" |
-| **Ambiente** | Ajustar el entorno | "Diseña instrucciones paso a paso con imágenes" |
-
-### Prompt para TDAH
-
-> "Necesito adaptar el siguiente texto (500 palabras) sobre la Revolución Francesa para un estudiante de 8vo grado con TDAH. Divide el contenido en secciones cortas (máximo 3 párrafos), agrega preguntas de comprensión entre secciones, usa negritas para conceptos clave y sugiere pausas activas cada 10 minutos."
-
-### Consideraciones Éticas Fundamentales
-
-- 🔒 **Nunca menciones diagnósticos específicos de estudiantes** al usar IA
-- ❤️ **La adaptación es un derecho**, no una excepción
-- 🧠 **Conoce a tu estudiante** — la IA no reemplaza tu observación directa
-`,
-  },
-  {
-    slug: 'gamificacion-educativa',
-    icon: 'sports_esports',
-    title: 'Gamificación Educativa',
-    description: 'Transforma tus clases en experiencias de juego con mecánicas de gamificación diseñadas con IA.',
-    colorClass: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-    category: 'Metodología',
-    readTime: '8 min',
-    content: `
-## Gamificación ≠ Juegos
-
-La gamificación no es jugar en clase. Es aplicar **mecánicas de juego** (puntos, niveles, desafíos, narrativa) en contextos educativos para aumentar la motivación.
-
-### Mecánicas Clave
-
-- 🏆 **Puntos y recompensas** — Sistema de reconocimiento
-- 📊 **Barras de progreso** — Visualización del avance
-- 🎯 **Misiones y desafíos** — Tareas con narrativa
-- 🤝 **Cooperación** — Trabajo en equipo con roles
-- 🔓 **Desbloqueo de contenido** — Motivación por descubrimiento
-
-### Prompt para Gamificar
-
-> "Eres un diseñador de experiencias educativas. Gamifica una unidad de Matemáticas sobre fracciones para 6to grado que dure 2 semanas. Diseña: 1) Una narrativa envolvente (historia/tema), 2) Sistema de puntos y niveles, 3) Al menos 5 misiones progresivas, 4) Un desafío final. Los estudiantes no tienen acceso a tecnología — todo debe ser analógico."
-
-### Ética en la Gamificación
-
-- ⚖️ **No fomentes la competencia tóxica** — enfócate en superarse a sí mismo
-- 🎮 **No priorices el juego sobre el aprendizaje**
-- 🌟 **Asegúrate de que todos puedan ganar** — inclusividad en las mecánicas
-`,
-  },
-  {
-    slug: 'creatividad-aula',
-    icon: 'lightbulb',
-    title: 'Inyectar Creatividad',
-    description: 'Usa la IA para generar analogías, metáforas y conexiones creativas que hagan tus clases más memorables.',
-    colorClass: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
-    category: 'Creatividad',
+    slug: 'ia-contenido-visual',
+    icon: 'palette',
+    title: 'IA para Contenido Visual',
+    description: 'Genera imágenes, ilustraciones y diseños gráficos de forma automática a partir de descripciones escritas.',
+    colorClass: 'bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400',
+    category: 'Contenido Visual',
     readTime: '6 min',
     content: `
-## La Creatividad como Herramienta Pedagógica
+## IA para Crear Contenido Visual
 
-Los estudiantes retienen un **65% más de información** cuando se presenta a través de analogías y metáforas creativas.
+Herramientas como **Canva**, **DALL·E** y **Midjourney** permiten generar imágenes, ilustraciones, diseños gráficos y contenido visual de manera automática a partir de descripciones escritas (prompts).
 
-### Tipos de Creatividad Asistida por IA
+### ¿Para qué sirve?
 
-1. **Analogías:** "Explica las mitocondrias como si fueran la planta eléctrica de una ciudad"
-2. **Historias:** "Crea un cuento corto donde los personajes son los elementos de la tabla periódica"
-3. **Conexiones inesperadas:** "¿Qué tienen en común el fútbol y las ecuaciones lineales?"
-4. **Visualizaciones:** "Describe cómo se vería el sistema solar si los planetas fueran frutas"
+Este tipo de inteligencia artificial es ampliamente utilizada en:
 
-### Prompt para Analogías
+- 🎨 **Marketing digital** — Creación de banners, posts y anuncios
+- 🖌️ **Diseño gráfico** — Ilustraciones personalizadas sin conocimientos avanzados
+- 📱 **Redes sociales** — Contenido visual atractivo y rápido
+- 📚 **Educación** — Material didáctico visual para clases
 
-> "Genera 5 analogías creativas y originales para explicar el concepto de 'democracia' a estudiantes de 7mo grado. Cada analogía debe usar elementos de la vida cotidiana del estudiante (deportes, redes sociales, videojuegos, familia, música). Incluye una breve explicación de por qué la analogía funciona."
+### Ventajas Clave
 
-### Uso Ético
+| Ventaja | Descripción |
+|---------|-------------|
+| **Ahorro de tiempo** | Crea imágenes en segundos, no en horas |
+| **Sin conocimientos técnicos** | No necesitas ser diseñador |
+| **Múltiples variaciones** | Genera diferentes versiones de una misma idea |
+| **Potencia la creatividad** | Explora estilos y conceptos rápidamente |
 
-- 🎨 **La creatividad de la IA inspira, no reemplaza**
-- 📚 **Verifica la precisión científica** de las analogías generadas
-- 🧒 **Asegúrate de que las analogías sean culturalmente apropiadas**
-`,
-  },
-];
+### Herramientas Recomendadas
 
-// ────────────────────────────────────────────────────
-// ARTÍCULOS DEL BLOG
-// ────────────────────────────────────────────────────
+1. **Canva** — Diseños con plantillas + IA generativa integrada
+2. **DALL·E** (OpenAI) — Generación de imágenes desde texto
+3. **Midjourney** — Imágenes artísticas de alta calidad
+4. **Adobe Firefly** — Integrada en el ecosistema Adobe
 
-export const blogPosts: BlogPost[] = [
-  {
-    slug: 'etica-ia-educacion',
-    title: '¿Qué significa usar IA de manera Ética en el Aula?',
-    excerpt: 'Una guía introductoria para docentes sobre los principios éticos fundamentales al integrar IA en la enseñanza.',
-    category: 'Ética',
-    date: '2026-03-15',
-    readTime: '12 min',
-    author: 'Equipo Otto AI',
-    coverIcon: 'balance',
-    colorClass: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400',
-    content: `
-## La IA llegó al aula — ¿Estamos preparados?
+### Ejemplo de Prompt para Imagen Educativa
 
-La Inteligencia Artificial ya no es ciencia ficción. Tus estudiantes la usan diariamente para tareas, investigaciones y proyectos. Como docentes, tenemos la responsabilidad de **modelar su uso ético**.
+> "Crea una ilustración colorida estilo infografía que muestre el ciclo del agua para estudiantes de primaria. Incluye flechas, etiquetas claras y un fondo azul cielo. Estilo: plano, amigable, educativo."
 
-### Los 5 Principios de la IA Ética en Educación
+### Consideraciones Éticas
 
-#### 1. 🔍 Transparencia
-**Qué significa:** Ser honesto sobre cuándo y cómo se usa la IA.
-
-Los estudiantes deben saber cuándo un material fue generado o asistido por IA. El docente debe modelar esta transparencia usándola abiertamente y discutiendo sus limitaciones.
-
-#### 2. ⚖️ Justicia y No Discriminación
-**Qué significa:** Verificar que las herramientas de IA no perpetúen sesgos.
-
-Los modelos de IA son entrenados con datos que pueden contener sesgos históricos. Es crucial que el docente revise las respuestas buscando estereotipos de género, raza o cultura.
-
-#### 3. 🔒 Privacidad y Protección de Datos
-**Qué significa:** Nunca ingresar información personal de estudiantes en herramientas de IA.
-
-Esto incluye nombres, calificaciones, diagnósticos médicos, información familiar o cualquier dato que identifique a un menor.
-
-#### 4. 🧠 Pensamiento Crítico sobre la IA
-**Qué significa:** Enseñar a los estudiantes a cuestionar las respuestas de la IA.
-
-La IA puede generar información incorrecta (alucinaciones). Los estudiantes deben aprender a verificar, comparar fuentes y desarrollar criterio propio.
-
-#### 5. 🤝 La IA como Herramienta, No como Reemplazo
-**Qué significa:** La IA potencia al docente, no lo sustituye.
-
-El valor del docente está en la relación humana, la empatía, el conocimiento del contexto local y la capacidad de adaptación — cosas que ninguna IA puede replicar.
-
----
-
-## ¿Cómo empezar?
-
-1. **Explora** herramientas de IA en un ambiente seguro (como este Playground)
-2. **Practica** creando prompts antes de usarlos en clase
-3. **Dialoga** con tus estudiantes sobre qué es la IA y sus limitaciones
-4. **Establece normas** claras sobre el uso de IA en tu aula
-5. **Comparte** tus experiencias con otros docentes
+- ⚖️ **Verifica derechos de uso** de las imágenes generadas antes de publicarlas
+- 🔍 **Revisa sesgos visuales** — La IA puede perpetuar estereotipos en las representaciones
+- 📌 **Cita la herramienta** usada cuando compartas contenido generado por IA
 `,
   },
   {
-    slug: 'prompts-efectivos-docentes',
-    title: '10 Prompts que todo Docente debería conocer',
-    excerpt: 'Una colección curada de los prompts más útiles para planificación, evaluación y diferenciación educativa.',
-    category: 'Prompts',
-    date: '2026-03-10',
-    readTime: '15 min',
-    author: 'Equipo Otto AI',
-    coverIcon: 'auto_awesome',
+    slug: 'ia-presentaciones',
+    icon: 'slideshow',
+    title: 'IA para Gráficos y Presentaciones',
+    description: 'Genera presentaciones, infografías y gráficos de forma automatizada con diseño profesional.',
     colorClass: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+    category: 'Presentaciones',
+    readTime: '7 min',
     content: `
-## Los 10 Prompts Esenciales para Docentes
+## IA para Crear Gráficos y Presentaciones
 
-Estos prompts han sido diseñados, probados y refinados por docentes reales. Cada uno incluye el contexto de uso y un ejemplo aplicable.
+Plataformas como **Beautiful.ai**, **Tome** y **Canva** ayudan a generar presentaciones, infografías y gráficos de forma automatizada.
 
-### 1. 📝 Planificación de Clase
-> "Diseña un plan de clase de [duración] sobre [tema] para [nivel]. Incluye: objetivo de aprendizaje, actividad de apertura (5 min), desarrollo (30 min), cierre (10 min) y evaluación formativa. Los estudiantes son [contexto]."
+### ¿Cómo Funciona?
 
-### 2. 📊 Generador de Rúbricas
-> "Crea una rúbrica analítica con 4 niveles para evaluar [tipo de trabajo] en [materia] de [grado]. Criterios: [lista]. Formato: tabla con descriptores específicos."
+Estas herramientas utilizan inteligencia artificial para:
 
-### 3. 🎯 Diferenciación
-> "Tengo un grupo diverso de [grado]. Adapta el siguiente [material/actividad] en 3 versiones: nivel básico, intermedio y avanzado, manteniendo el mismo objetivo de aprendizaje."
+- 📐 **Organizar la información** automáticamente en diapositivas
+- 🎨 **Seleccionar diseños adecuados** según el contenido
+- ✨ **Mejorar la estética** del material visual
+- 📊 **Generar gráficos** a partir de datos crudos
 
-### 4. 💬 Feedback Personalizado
-> "Como tutor empático, proporciona retroalimentación formativa para este [tipo de trabajo] de un estudiante de [grado]. Sigue la estructura: fortaleza → área de mejora → siguiente paso."
+### ¿Dónde es más útil?
 
-### 5. 🧪 Actividades Prácticas
-> "Diseña 3 actividades prácticas (hands-on) para enseñar [concepto] sin usar tecnología. Nivel: [grado]. Materiales: solo [lista de materiales disponibles]."
+Son especialmente útiles en **entornos académicos y profesionales**, ya que permiten comunicar ideas complejas de manera clara, visual y estructurada, reduciendo el esfuerzo en el diseño manual.
 
-### 6. ❓ Banco de Preguntas
-> "Genera 15 preguntas sobre [tema] para [grado] distribuidas así: 5 de conocimiento, 5 de comprensión y 5 de aplicación (Taxonomía de Bloom). Incluye las respuestas correctas."
+### Herramientas Recomendadas
 
-### 7. 📖 Resumen Adaptado
-> "Resume el siguiente texto sobre [tema] para que sea comprensible por estudiantes de [grado]. Usa vocabulario simple, oraciones cortas y agrega 3 preguntas de comprensión al final."
+1. **Beautiful.ai** — Presentaciones con diseño inteligente automático
+2. **Tome** — Narrativas visuales generadas por IA
+3. **Canva Presentaciones** — Plantillas + generación asistida
+4. **Gamma** — Presentaciones y documentos desde un prompt
 
-### 8. 🎮 Gamificación Express
-> "Convierte este [tema/actividad] en un desafío gamificado de 20 minutos para [grado]. Incluye: misión, reglas, sistema de puntos y un premio simbólico."
+### Ejemplo de Prompt
 
-### 9. 👨‍👩‍👧 Comunicación con Padres
-> "Redacta un mensaje profesional y cálido para los padres de familia informando sobre [situación]. Tono: empático, claro y propositivo. Incluye sugerencias de apoyo en casa."
+> "Crea una presentación de 6 diapositivas sobre el calentamiento global para estudiantes de secundaria. Incluye datos estadísticos, gráficos de temperatura y sugerencias de imágenes. Diseño moderno y limpio."
 
-### 10. 🔄 Reflexión Docente
-> "Ayúdame a reflexionar sobre mi práctica pedagógica. Hoy enseñé [tema] y noté que [observación]. ¿Qué estrategias podría implementar para mejorar la participación y comprensión?"
+### Consejos para Docentes
 
----
+- 📝 **Revisa siempre el contenido generado** — la IA puede incluir datos inexactos
+- 🎯 **Adapta al nivel de tus estudiantes** — simplifica o enriquece según necesidad
+- 🖼️ **Complementa con recursos propios** — usa las presentaciones como base, no como producto final
+`,
+  },
+//   {
+//     slug: 'ia-paginas-web',
+//     icon: 'language',
+//     title: 'IA para Crear Páginas Web',
+//     description: 'Diseña y desarrolla sitios web sin necesidad de conocimientos en programación.',
+//     colorClass: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400',
+//     category: 'Desarrollo Web',
+//     readTime: '6 min',
+//     content: `
+// ## IA para Crear Páginas Web
 
-## 💡 Consejo Final
+// Herramientas como **Wix ADI**, **Bookmark AiDA** y **10Web** permiten diseñar y desarrollar sitios web sin necesidad de conocimientos en programación.
 
-El secreto no es el prompt perfecto — es la **iteración**. Usa el Playground de Otto AI para probar, ajustar y perfeccionar tus prompts.
+// ### ¿Cómo Funciona?
+
+// Estas plataformas analizan las necesidades del usuario y generan automáticamente:
+
+// - 🏗️ **Estructuras web** completas
+// - 🎨 **Diseños personalizados** según el tipo de sitio
+// - 📝 **Contenido textual** adaptado al propósito
+// - ⚙️ **Funcionalidades** como formularios, galerías y más
+
+// ### ¿Por qué es importante?
+
+// Esto **democratiza el acceso al desarrollo web**, permitiendo que estudiantes, emprendedores y docentes puedan crear sus propias páginas de forma rápida y eficiente.
+
+// ### Herramientas Recomendadas
+
+// 1. **Wix ADI** — Sitios web generados automáticamente con IA
+// 2. **Bookmark AiDA** — Diseño web en minutos
+// 3. **10Web** — Sitios WordPress generados por IA
+// 4. **Framer** — Diseño web profesional con IA
+
+// ### Aplicación Educativa
+
+// > Los docentes pueden crear portafolios digitales, páginas de clase o micrositios para proyectos estudiantiles sin necesidad de saber programar.
+
+// ### Consideraciones
+
+// - 🔒 **Protege la privacidad** de tus estudiantes al crear sitios públicos
+// - 📱 **Verifica la responsividad** — asegúrate de que se vea bien en celulares
+// - ♿ **Accesibilidad** — revisa que el sitio sea usable para todos
+// `,
+//   },
+  {
+    slug: 'ia-investigacion',
+    icon: 'search',
+    title: 'IA para Investigación',
+    description: 'Busca, resume, analiza y explica información en segundos con herramientas de IA.',
+    colorClass: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+    category: 'Investigación',
+    readTime: '8 min',
+    content: `
+## IA para Investigación y Búsqueda de Información
+
+Herramientas como **ChatGPT**, **Google Gemini** y **Perplexity AI** facilitan la investigación al permitir buscar, resumir, analizar y explicar información en segundos.
+
+### ¿Por qué es clave en educación?
+
+Este tipo de IA es fundamental en el ámbito académico, ya que ayuda a los estudiantes y docentes a:
+
+- 🔍 **Comprender temas complejos** — Explicaciones adaptadas al nivel
+- 💡 **Generar ideas** — Brainstorming para proyectos e investigaciones
+- 📋 **Estructurar trabajos** — Esquemas, índices y marcos teóricos
+- ⚡ **Acceder a información** de forma rápida y sintetizada
+
+### Herramientas Recomendadas
+
+1. **ChatGPT** (OpenAI) — Asistente conversacional para investigación
+2. **Google Gemini** — Búsqueda inteligente con IA de Google
+3. **Perplexity AI** — Motor de búsqueda con respuestas citadas
+4. **Consensus** — Búsqueda de papers académicos con IA
+
+### Ejemplo de Prompt para Investigación
+
+> "Explica las causas principales de la Revolución Industrial en un lenguaje comprensible para estudiantes de 2do de secundaria. Organiza la información en 4 secciones con subtítulos claros e incluye 3 fuentes recomendadas para profundizar."
+
+### ⚠️ Pensamiento Crítico
+
+Es **fundamental** desarrollar pensamiento crítico para validar la información obtenida:
+
+- 🤔 **La IA puede alucinar** — siempre verifica datos, fechas y cifras
+- 📚 **Cruza con fuentes confiables** — no dependas de una sola herramienta
+- 🧠 **Enséñale a tus estudiantes** a cuestionar, no solo a copiar
+- 📖 **Cita correctamente** — la IA no es una fuente primaria
 `,
   },
   {
-    slug: 'ia-no-reemplaza-docente',
-    title: 'La IA no reemplaza al Docente: un manifiesto pedagógico',
-    excerpt: '¿Por qué la inteligencia artificial nunca podrá sustituir la conexión humana en el aula? Un análisis profundo.',
-    category: 'Reflexión',
-    date: '2026-03-05',
-    readTime: '10 min',
-    author: 'Equipo Otto AI',
-    coverIcon: 'favorite',
-    colorClass: 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400',
+    slug: 'ia-redaccion',
+    icon: 'edit_note',
+    title: 'IA para Redacción y Textos',
+    description: 'Genera textos, corrige errores gramaticales y mejora la calidad de la escritura.',
+    colorClass: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400',
+    category: 'Redacción',
+    readTime: '7 min',
     content: `
-## La conexión humana es irremplazable
+## IA para Redacción y Creación de Textos
 
-En un mundo donde la IA puede generar planes de clase, corregir tareas y crear materiales en segundos, surge una pregunta legítima: **¿para qué necesitamos docentes?**
+Herramientas como **Grammarly**, **Jasper AI** y **ChatGPT** permiten generar textos, corregir errores gramaticales y mejorar la calidad de la escritura.
 
-La respuesta es profunda y hermosa.
+### ¿Para qué sirven?
 
-### Lo que la IA puede hacer
+Son útiles para:
 
-✅ Generar contenido educativo rápidamente
-✅ Adaptar materiales a diferentes niveles
-✅ Proporcionar retroalimentación inmediata
-✅ Crear evaluaciones y rúbricas
-✅ Sugerir estrategias pedagógicas
+- 📝 **Redactar ensayos** — Estructura y contenido asistido
+- 📧 **Correos electrónicos** — Comunicación profesional rápida
+- 📊 **Informes** — Documentos claros y bien organizados
+- 🌐 **Contenido digital** — Blogs, publicaciones y materiales web
 
-### Lo que la IA NO puede hacer
+### Beneficios en Educación
 
-❌ **Mirar a un estudiante a los ojos** y saber que algo anda mal en casa
-❌ **Celebrar genuinamente** cuando un estudiante comprende algo por primera vez
-❌ **Adaptar el tono** en tiempo real porque nota que el grupo está cansado
-❌ **Conocer el contexto cultural** de cada familia en la comunidad
-❌ **Inspirar vocaciones** a través del ejemplo personal
-❌ **Dar un abrazo** cuando un estudiante lo necesita
+Estas herramientas ayudan a mejorar la:
 
-### El rol del docente en la era de la IA
+| Aspecto | Cómo ayuda la IA |
+|---------|-----------------|
+| **Coherencia** | Mantiene el hilo lógico del texto |
+| **Cohesión** | Conecta ideas con transiciones adecuadas |
+| **Claridad** | Simplifica oraciones complejas |
+| **Gramática** | Corrige errores ortográficos y sintácticos |
 
-El docente del siglo XXI no es un transmisor de información (eso lo hace Google desde hace años). Es un:
+### Herramientas Recomendadas
 
-1. **Curador:** Selecciona, filtra y contextualiza información
-2. **Mentor:** Guía el desarrollo personal y académico
-3. **Diseñador:** Crea experiencias de aprendizaje significativas
-4. **Mediador:** Facilita la construcción colectiva del conocimiento
-5. **Modelo:** Demuestra valores, ética y pensamiento crítico
+1. **Grammarly** — Corrección gramatical y de estilo en tiempo real
+2. **Jasper AI** — Generación de contenido creativo y profesional
+3. **ChatGPT** — Asistente versátil para todo tipo de textos
+4. **QuillBot** — Parafraseo y mejora de textos
 
----
+### Ejemplo de Prompt
 
-> *"La tecnología es una herramienta magnífica. Pero si el maestro no inspira, la mejor tecnología del mundo no servirá de nada."* — Adaptación libre
+> "Revisa el siguiente párrafo de un ensayo sobre cambio climático escrito por un estudiante de preparatoria. Corrige errores gramaticales, mejora la claridad y sugiere cómo fortalecer los argumentos. Mantén la voz del estudiante."
 
-## Nuestra visión en Otto AI
+### Uso Responsable
 
-Esta plataforma existe para **empoderar al docente**, no para reemplazarlo. Cada herramienta que construimos tiene un solo propósito: darte más tiempo y recursos para hacer lo que mejor sabes hacer — **enseñar con el corazón**.
+- ✅ **Úsala como herramienta de aprendizaje**, no como sustituto del esfuerzo
+- 🔄 **Revisa y personaliza** siempre el texto generado
+- 📖 **Enseña a tus estudiantes** a escribir primero y luego usar IA para mejorar
 `,
   },
   {
-    slug: 'peligros-ia-aula',
-    title: 'Los 7 peligros reales de la IA en el Aula (y cómo evitarlos)',
-    excerpt: 'Conoce los riesgos concretos de usar inteligencia artificial en educación y las estrategias para mitigarlos.',
-    category: 'Seguridad',
-    date: '2026-02-28',
-    readTime: '11 min',
-    author: 'Equipo Otto AI',
-    coverIcon: 'warning',
-    colorClass: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+    slug: 'ia-educacion-docentes',
+    icon: 'school',
+    title: 'IA para Educación y Docentes',
+    description: 'Herramientas diseñadas para crear planes de clase, actividades, evaluaciones y contenidos educativos.',
+    colorClass: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
+    category: 'Educación',
+    readTime: '9 min',
     content: `
-## No todo brilla en la IA
+## IA para Educación y Docentes
 
-Creer ciegamente en la IA es tan peligroso como rechazarla completamente. Como docentes, necesitamos un enfoque **informado y crítico**.
+Herramientas como **MagicSchool AI**, **Eduaide.AI** y **Curipod** están diseñadas **específicamente** para apoyar a los docentes en su labor diaria.
 
-### Peligro 1: 🤥 Alucinaciones
-**Qué es:** La IA genera información falsa con total confianza.
-**Cómo evitarlo:** Siempre verifica datos, fechas y cifras con fuentes confiables.
+### ¿Qué pueden hacer?
 
-### Peligro 2: 🏷️ Sesgos Algorítmicos  
-**Qué es:** Las respuestas reflejan estereotipos de los datos de entrenamiento.
-**Cómo evitarlo:** Lee las respuestas con lente crítica buscando activamente sesgos de género, raza y cultura.
+Estas plataformas permiten:
 
-### Peligro 3: 📋 Dependencia Excesiva
-**Qué es:** Dejar que la IA piense por nosotros. Los estudiantes dejan de desarrollar pensamiento crítico.
-**Cómo evitarlo:** Usa la IA como punto de partida, nunca como producto final.
+- 📋 **Crear planes de clase** — Estructurados y alineados a estándares
+- 🎮 **Generar actividades** — Interactivas, gamificadas y diferenciadas
+- 📊 **Diseñar evaluaciones** — Rúbricas, exámenes y quizzes automáticos
+- 🔄 **Adaptar contenidos** — Material personalizado para diferentes niveles
 
-### Peligro 4: 🔓 Violación de Privacidad
-**Qué es:** Compartir datos sensibles de estudiantes con herramientas de IA.
-**Cómo evitarlo:** NUNCA incluyas nombres reales, diagnósticos o información personal.
+### Beneficios para el Docente
 
-### Peligro 5: 📉 Brecha Digital  
-**Qué es:** La IA amplifica la desigualdad entre quienes tienen acceso y quienes no.
-**Cómo evitarlo:** Diseña actividades que no dependan exclusivamente de tecnología.
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Eficiencia** | Reduce horas de planificación |
+| **Innovación** | Introduce dinámicas nuevas al aula |
+| **Personalización** | Adapta contenido a cada estudiante |
+| **Creatividad** | Genera ideas frescas para enseñar |
 
-### Peligro 6: ✏️ Plagio Sofisticado
-**Qué es:** Los estudiantes usan IA para generar trabajos sin aprender.
-**Cómo evitarlo:** Diseña evaluaciones procesuales, no solo de producto final.
+### Herramientas Recomendadas
 
-### Peligro 7: 🎭 Sustitución de Relaciones Humanas
-**Qué es:** Usar chatbots como sustituto de la interacción docente-estudiante.
-**Cómo evitarlo:** La IA asiste la logística; tu presencia emocional es insustituible.
+1. **MagicSchool AI** — Plataforma integral para docentes con 50+ herramientas
+2. **Eduaide.AI** — Generador de recursos educativos por competencias
+3. **Curipod** — Presentaciones interactivas con retroalimentación en vivo
+4. **Diffit** — Adaptación de textos por nivel de lectura
 
----
+### Ejemplo de Prompt para Planificación
 
-## Conclusión
+> "Diseña un plan de clase de 50 minutos sobre fracciones equivalentes para 5to grado. Incluye: objetivo de aprendizaje alineado a SEP, actividad de apertura con material concreto, desarrollo con trabajo colaborativo, cierre con evaluación formativa y tarea para casa."
 
-La IA es una **herramienta poderosa** que, como toda herramienta, puede usarse bien o mal. La diferencia está en el docente que la maneja.
+### Impacto en el Aula
+
+Su uso mejora la **eficiencia docente** y favorece la **innovación en el aula**, facilitando una enseñanza más dinámica y personalizada. El tiempo que ahorras en planificación lo puedes invertir en lo más importante: **estar presente para tus estudiantes**.
 `,
   },
 ];
@@ -465,8 +304,4 @@ La IA es una **herramienta poderosa** que, como toda herramienta, puede usarse b
 
 export function getGuideBySlug(slug: string): Guide | undefined {
   return guides.find((g) => g.slug === slug);
-}
-
-export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((p) => p.slug === slug);
 }

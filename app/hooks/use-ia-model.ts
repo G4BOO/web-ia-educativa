@@ -1,24 +1,35 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+
+export type PlaygroundMode = 'text' | 'image' | 'presentation';
 
 /**
  * Hook que conecta el playground con la API de evaluación.
- * Usa useChat de @ai-sdk/react v6 con DefaultChatTransport
- * para manejar streaming, mensajes y reasoning de manera nativa.
+ *
+ * El modo se envía como `body` en cada llamada a `sendMessage`,
+ * que es la forma correcta de pasar datos dinámicos en AI SDK v6.
+ * Usar `body` en DefaultChatTransport captura el valor por closure
+ * y puede quedarse "stale".
  */
-export function useIaModel() {
+export function useIaModel(mode: PlaygroundMode = 'text') {
   const [isStarted, setIsStarted] = useState(false);
 
-  // En AI SDK v6, useChat usa transport en vez de api
-  const transport = useMemo(() => new DefaultChatTransport({
-    api: '/api/evaluate',
-  }), []);
+  // Ref para tener siempre el valor actual del modo sin stale closures
+  const modeRef = useRef(mode);
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
+
+  const transport = useMemo(
+    () => new DefaultChatTransport({ api: '/api/evaluate' }),
+    [],
+  );
 
   const {
     messages,
     setMessages,
-    sendMessage,
+    sendMessage: rawSendMessage,
     status,
     stop,
     error,
@@ -31,20 +42,14 @@ export function useIaModel() {
 
   const isLoading = status === 'streaming' || status === 'submitted';
 
-  const handleSubmit = useCallback(
-    async (e?: React.FormEvent<HTMLFormElement>, promptFromCard?: string) => {
-      if (e && typeof e.preventDefault === 'function') {
-        e.preventDefault();
-      }
-
-      const text = promptFromCard;
-      if (text) {
-        if (!text.trim() || isLoading) return;
-        setIsStarted(true);
-        sendMessage({ text });
-      }
+  // Wrapper que inyecta el modo actual en cada request
+  const sendMessage = useCallback(
+    (params: { text: string }) => {
+      return rawSendMessage(params, {
+        body: { mode: modeRef.current },
+      });
     },
-    [isLoading, sendMessage]
+    [rawSendMessage],
   );
 
   const handleClear = useCallback(() => {
@@ -53,17 +58,17 @@ export function useIaModel() {
     setIsStarted(false);
   }, [stop, setMessages]);
 
-  /** Extrae la puntuación de la respuesta */
+  /** Extrae la puntuación numérica de la respuesta del asistente */
   const getScore = useCallback((): number | null => {
-    const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant');
+    const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
     if (!lastAssistant) return null;
 
-    const text = lastAssistant.parts
-      ?.filter((p) => p.type === 'text')
-      .map(p => (p as { type: 'text'; text: string }).text)
-      .join('') || '';
+    const text =
+      lastAssistant.parts
+        ?.filter((p) => p.type === 'text')
+        .map((p) => (p as { type: 'text'; text: string }).text)
+        .join('') || '';
 
-    // Flexible: con o sin ** bold markers
     const match = text.match(/\*{0,2}PUNTUACI[ÓO]N:\s*(\d+)\s*\/\s*100\*{0,2}/i);
     return match ? parseInt(match[1], 10) : null;
   }, [messages]);
@@ -73,7 +78,6 @@ export function useIaModel() {
     setMessages,
     sendMessage,
     isLoading,
-    handleSubmit,
     handleClear,
     isStarted,
     setIsStarted,

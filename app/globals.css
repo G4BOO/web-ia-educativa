@@ -6,9 +6,9 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-primary: #f4a825;
-  --color-background-light: #f8f7f5;
-  --color-background-dark: #221b10;
+  --color-primary: #8b5cf6; /* Violet 500 */
+  --color-background-light: #f8fafc; /* Slate 50 */
+  --color-background-dark: #020617; /* Slate 950 */
 }
 
 @layer utilities {

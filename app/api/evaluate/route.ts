@@ -127,60 +127,20 @@ const openRouter = createOpenRouter({
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { messages: uiMessages } = body;
+    const { messages: uiMessages, mode = 'text' } = await req.json();
+    console.log('[Evaluate API] Modo recibido:', mode);
+    const systemPrompt = SYSTEM_PROMPTS[mode] ?? SYSTEM_PROMPTS.text;
+    const modelMessages = normalizeMessages(uiMessages);
+    const model = openRouter.chat('inclusionai/ling-2.6-flash:free');
 
-
-
-    const secondModel = openRouter.chat('nvidia/nemotron-3-super-120b-a12b:free')
-
-    
-    const modelMessages = (uiMessages || []).map((msg: { role: string; parts?: { type: string; text?: string }[]; content?: string }) => {
-      let content = '';
-      if (msg.parts && Array.isArray(msg.parts)) {
-        content = msg.parts
-          .filter((p: { type: string }) => p.type === 'text')
-          .map((p: { text?: string }) => p.text || '')
-          .join('');
-      } else if (typeof msg.content === 'string') {
-        content = msg.content;
-      }
-
-      return {
-        role: msg.role as 'user' | 'assistant',
-        content,
-      };
+    const result = streamText({
+      model,
+      system: systemPrompt,
+      messages: modelMessages,
+      maxRetries: 0,
     });
 
-    //FallBack
-    let result;
-
-
-    try {
-      result = streamText({
-        model: secondModel,
-        system: SYSTEM_PROMPT,
-        messages: modelMessages,
-        maxRetries: 0,
-        
-      });
-
-      
-      
-      console.log(result.response)
-      console.log(result.toUIMessageStreamResponse())
-    
-      return result.toUIMessageStreamResponse();
-
-    } catch (err: any) {
-
-      
-        
-    }
-
-    
-
-
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error('Error en Evaluate API:', error);
     return Response.json(

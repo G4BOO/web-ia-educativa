@@ -1,12 +1,9 @@
-import { streamText } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { streamText } from 'ai'
+import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 
 // ────────────────────────────────────────────────────
 // System prompts por modo
 // ────────────────────────────────────────────────────
-
-
-
 
 const SHARED_FORMAT_RULES = `
 ## Formato de respuesta obligatorio
@@ -31,7 +28,7 @@ Dentro de un bloque de citas
 - [cambio 2]
 
 Mantén tono entusiasta, usa máximo 3 emojis por sección. No excedas 30 líneas totales.
-`;
+`
 
 const SYSTEM_PROMPTS: Record<string, string> = {
   text: `Eres un experto pedagogo e ingeniero de IA especializado en evaluar prompts educativos para TEXTO.
@@ -75,21 +72,21 @@ Aprueba con ≥70 pts. Para imagen, prioriza que el prompt mejorado incluya SIEM
 ${SHARED_FORMAT_RULES}
 
 Aprueba con ≥70 pts. Si falta el número de slides, el prompt mejorado debe fijar 5 diapositivas por defecto.`,
-};
+}
 
 // ────────────────────────────────────────────────────
 // Tipos para mensajes de la UI
 // ────────────────────────────────────────────────────
 
 interface UIMessagePart {
-  type: string;
-  text?: string;
+  type: string
+  text?: string
 }
 
 interface UIMessage {
-  role: string;
-  parts?: UIMessagePart[];
-  content?: string;
+  role: string
+  parts?: UIMessagePart[]
+  content?: string
 }
 
 // ────────────────────────────────────────────────────
@@ -101,16 +98,16 @@ function extractMessageContent(msg: UIMessage): string {
     return msg.parts
       .filter((p) => p.type === 'text')
       .map((p) => p.text || '')
-      .join('');
+      .join('')
   }
-  return typeof msg.content === 'string' ? msg.content : '';
+  return typeof msg.content === 'string' ? msg.content : ''
 }
 
 function normalizeMessages(uiMessages: UIMessage[]) {
   return (uiMessages || []).map((msg) => ({
     role: msg.role as 'user' | 'assistant',
     content: extractMessageContent(msg),
-  }));
+  }))
 }
 
 // ────────────────────────────────────────────────────
@@ -119,7 +116,7 @@ function normalizeMessages(uiMessages: UIMessage[]) {
 
 const openRouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
-});
+})
 
 // ────────────────────────────────────────────────────
 // Route handler
@@ -127,25 +124,25 @@ const openRouter = createOpenRouter({
 
 export async function POST(req: Request) {
   try {
-    const { messages: uiMessages, mode = 'text' } = await req.json();
-    console.log('[Evaluate API] Modo recibido:', mode);
-    const systemPrompt = SYSTEM_PROMPTS[mode] ?? SYSTEM_PROMPTS.text;
-    const modelMessages = normalizeMessages(uiMessages);
-    const model = openRouter.chat('inclusionai/ling-2.6-flash:free');
+    const { messages: uiMessages, mode = 'text' } = await req.json()
+    console.log('[Evaluate API] Modo recibido:', mode)
+    const systemPrompt = SYSTEM_PROMPTS[mode] ?? SYSTEM_PROMPTS.text
+    const modelMessages = normalizeMessages(uiMessages)
+    const model = openRouter.chat('inclusionai/ling-2.6-1t:free')
 
     const result = streamText({
       model,
       system: systemPrompt,
       messages: modelMessages,
       maxRetries: 0,
-    });
+    })
 
-    return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse()
   } catch (error) {
-    console.error('Error en Evaluate API:', error);
+    console.error('Error en Evaluate API:', error)
     return Response.json(
       { error: 'Error interno del servidor.' },
       { status: 500 },
-    );
+    )
   }
 }

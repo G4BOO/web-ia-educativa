@@ -135,6 +135,11 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -7,9 +7,9 @@ import { Home, Bot, BookOpen, Sparkles, Menu, X, GraduationCap } from 'lucide-re
 
 const NAV_ITEMS = [
   { href: '/', icon: Home, label: 'Inicio' },
-  { href: '/playground', icon: Bot, label: 'Playground' },
-  { href: '/prompts', icon: Sparkles, label: 'Prompts' },
   { href: '/guias', icon: BookOpen, label: 'Guías' },
+    { href: '/prompts', icon: Sparkles, label: 'Prompts' },
+   { href: '/playground', icon: Bot, label: 'Playground' },
 
 ];
 

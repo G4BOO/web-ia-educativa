@@ -128,7 +128,7 @@ export async function POST(req: Request) {
     console.log('[Evaluate API] Modo recibido:', mode)
     const systemPrompt = SYSTEM_PROMPTS[mode] ?? SYSTEM_PROMPTS.text
     const modelMessages = normalizeMessages(uiMessages)
-    const model = openRouter.chat('inclusionai/ling-2.6-1t:free')
+    const model = openRouter.chat('poolside/laguna-xs.2:free')
 
     const result = streamText({
       model,

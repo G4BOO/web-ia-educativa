@@ -13,7 +13,7 @@ export default function GuiasPage() {
       <header className="sticky top-0 z-10 px-4 md:px-8 py-6 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
         <div className="flex items-center gap-3 mb-1">
           <span className="material-symbols-outlined text-primary text-2xl">auto_stories</span>
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-slate-50">Guías Educativas</h2>
+          <h2 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-slate-50">Guías Educativas</h2>
         </div>
         <p className="text-slate-500 dark:text-zinc-400 mt-1 font-medium text-sm md:text-base">Aprende a usar la IA de manera ética y efectiva en tu aula.</p>
       </header>
